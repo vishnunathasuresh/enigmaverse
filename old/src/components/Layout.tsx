@@ -1,64 +1,20 @@
-import {
-  isRouteErrorResponse,
-  Links,
-  Link,
-  Meta,
-  Outlet,
-  Scripts,
-  ScrollRestoration,
-  useLocation,
-} from "react-router";
-import { useEffect, useState } from "react";
-import { motion } from "motion/react";
-import { BrainCircuit, Calendar, Menu, Users, X } from "lucide-react";
-import clsx from "clsx";
+import { Outlet, Link, useLocation } from 'react-router-dom';
+import { motion } from 'motion/react';
+import { BrainCircuit, Calendar, Users, Menu, X } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import clsx from 'clsx';
 
-import "./app.css";
-
-export const links = () => [
-  { rel: "preconnect", href: "https://fonts.googleapis.com" },
-  {
-    rel: "preconnect",
-    href: "https://fonts.gstatic.com",
-    crossOrigin: "anonymous",
-  },
-  {
-    rel: "stylesheet",
-    href: "https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap",
-  },
-];
-
-export function Layout({ children }: { children: React.ReactNode }) {
-  return (
-    <html lang="en">
-      <head>
-        <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <Meta />
-        <Links />
-      </head>
-      <body>
-        {children}
-        <ScrollRestoration />
-        <Scripts />
-      </body>
-    </html>
-  );
-}
-
-export default function App() {
-  return <SiteLayout />;
-}
-
-function SiteLayout() {
+export default function Layout() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
 
   useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 50);
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   useEffect(() => {
@@ -66,26 +22,28 @@ function SiteLayout() {
   }, [location.pathname]);
 
   const navLinks = [
-    { name: "Home", path: "/", icon: BrainCircuit },
-    { name: "Events", path: "/events", icon: Calendar },
-    { name: "About Us", path: "/about", icon: Users },
+    { name: 'Home', path: '/', icon: BrainCircuit },
+    { name: 'Events', path: '/events', icon: Calendar },
+    { name: 'About Us', path: '/about', icon: Users },
   ];
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-50 font-sans selection:bg-cyan-500/30">
+      {/* Futuristic Winter Background */}
       <div className="fixed inset-0 z-[-1] overflow-hidden pointer-events-none">
         <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] rounded-full bg-cyan-900/20 blur-[120px]" />
         <div className="absolute bottom-[-20%] right-[-10%] w-[60%] h-[60%] rounded-full bg-blue-900/20 blur-[150px]" />
         <div className="absolute top-[40%] left-[60%] w-[30%] h-[30%] rounded-full bg-indigo-900/10 blur-[100px]" />
+        {/* Snow overlay effect */}
         <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-20 mix-blend-screen" />
       </div>
 
       <header
         className={clsx(
-          "fixed top-0 w-full z-50 transition-all duration-300 border-b",
+          'fixed top-0 w-full z-50 transition-all duration-300 border-b',
           isScrolled
-            ? "bg-slate-950/80 backdrop-blur-md border-white/10 py-3 shadow-lg shadow-cyan-900/5"
-            : "bg-transparent border-transparent py-5"
+            ? 'bg-slate-950/80 backdrop-blur-md border-white/10 py-3 shadow-lg shadow-cyan-900/5'
+            : 'bg-transparent border-transparent py-5'
         )}
       >
         <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
@@ -98,14 +56,15 @@ function SiteLayout() {
             </span>
           </Link>
 
+          {/* Desktop Nav */}
           <nav className="hidden md:flex items-center gap-8">
             {navLinks.map((link) => (
               <Link
                 key={link.name}
                 to={link.path}
                 className={clsx(
-                  "text-sm font-medium transition-colors hover:text-cyan-400",
-                  location.pathname === link.path ? "text-cyan-400" : "text-slate-300"
+                  'text-sm font-medium transition-colors hover:text-cyan-400',
+                  location.pathname === link.path ? 'text-cyan-400' : 'text-slate-300'
                 )}
               >
                 {link.name}
@@ -113,6 +72,7 @@ function SiteLayout() {
             ))}
           </nav>
 
+          {/* Mobile Menu Toggle */}
           <button
             className="md:hidden p-2 text-slate-300 hover:text-white"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -121,6 +81,7 @@ function SiteLayout() {
           </button>
         </div>
 
+        {/* Mobile Nav */}
         {mobileMenuOpen && (
           <motion.div
             initial={{ opacity: 0, y: -10 }}
@@ -132,10 +93,10 @@ function SiteLayout() {
                 key={link.name}
                 to={link.path}
                 className={clsx(
-                  "flex items-center gap-3 p-3 rounded-lg transition-colors",
+                  'flex items-center gap-3 p-3 rounded-lg transition-colors',
                   location.pathname === link.path
-                    ? "bg-cyan-500/10 text-cyan-400"
-                    : "text-slate-300 hover:bg-white/5 hover:text-white"
+                    ? 'bg-cyan-500/10 text-cyan-400'
+                    : 'text-slate-300 hover:bg-white/5 hover:text-white'
                 )}
               >
                 <link.icon className="w-5 h-5" />
@@ -162,34 +123,5 @@ function SiteLayout() {
         </div>
       </footer>
     </div>
-  );
-}
-
-export function ErrorBoundary({ error }: { error: unknown }) {
-  let message = "Oops!";
-  let details = "An unexpected error occurred.";
-  let stack: string | undefined;
-
-  if (isRouteErrorResponse(error)) {
-    message = error.status === 404 ? "404" : "Error";
-    details =
-      error.status === 404
-        ? "The requested page could not be found."
-        : error.statusText || details;
-  } else if (import.meta.env.DEV && error && error instanceof Error) {
-    details = error.message;
-    stack = error.stack;
-  }
-
-  return (
-    <main className="pt-16 p-4 container mx-auto">
-      <h1>{message}</h1>
-      <p>{details}</p>
-      {stack && (
-        <pre className="w-full p-4 overflow-x-auto">
-          <code>{stack}</code>
-        </pre>
-      )}
-    </main>
   );
 }
