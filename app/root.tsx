@@ -72,74 +72,71 @@ function SiteLayout() {
   ];
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-50 font-sans selection:bg-cyan-500/30">
-      <div className="fixed inset-0 z-[-1] overflow-hidden pointer-events-none">
-        <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] rounded-full bg-cyan-900/20 blur-[120px]" />
-        <div className="absolute bottom-[-20%] right-[-10%] w-[60%] h-[60%] rounded-full bg-blue-900/20 blur-[150px]" />
-        <div className="absolute top-[40%] left-[60%] w-[30%] h-[30%] rounded-full bg-indigo-900/10 blur-[100px]" />
-        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-20 mix-blend-screen" />
-      </div>
+    <div className="min-h-screen bg-black text-slate-50 font-sans selection:bg-cyan-500/30">
 
-      <header
-        className={clsx(
-          "fixed top-0 w-full z-50 transition-all duration-300 border-b",
-          isScrolled
-            ? "bg-slate-950/80 backdrop-blur-md border-white/10 py-3 shadow-lg shadow-cyan-900/5"
-            : "bg-transparent border-transparent py-5"
-        )}
-      >
-        <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-2 group">
-            <div className="relative flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-500 to-blue-600 shadow-lg shadow-cyan-500/20 group-hover:shadow-cyan-500/40 transition-all">
-              <BrainCircuit className="w-6 h-6 text-white" />
+
+      <header className="fixed top-0 w-full z-50 flex justify-center px-4 pt-4 pointer-events-none">
+        <nav
+          className={clsx(
+            "pointer-events-auto w-full max-w-2xl flex items-center justify-between rounded-full px-6 py-3 transition-all duration-500",
+            "bg-white/[0.04] border border-white/[0.08] shadow-[0_8px_32px_rgba(0,0,0,0.4)] backdrop-blur-2xl backdrop-saturate-150",
+            isScrolled && "bg-white/[0.07] border-white/[0.12] shadow-[0_8px_40px_rgba(0,0,0,0.5)]"
+          )}
+        >
+          <Link to="/" className="flex items-center gap-2.5 group">
+            <div className="relative flex items-center justify-center w-9 h-9 rounded-xl bg-gradient-to-br from-cyan-500 to-blue-600 shadow-lg shadow-cyan-500/25 group-hover:shadow-cyan-500/40 transition-all">
+              <BrainCircuit className="w-5 h-5 text-white" />
             </div>
-            <span className="text-xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white to-slate-400">
+            <span className="text-[15px] font-semibold tracking-tight text-white/90">
               Enigma
             </span>
           </Link>
 
-          <nav className="hidden md:flex items-center gap-8">
+          <div className="hidden md:flex items-center gap-1">
             {navLinks.map((link) => (
               <Link
                 key={link.name}
                 to={link.path}
                 className={clsx(
-                  "text-sm font-medium transition-colors hover:text-cyan-400",
-                  location.pathname === link.path ? "text-cyan-400" : "text-slate-300"
+                  "relative px-4 py-1.5 rounded-full text-[14px] font-medium transition-all duration-200",
+                  location.pathname === link.path
+                    ? "text-cyan-300 bg-white/[0.08]"
+                    : "text-slate-400 hover:text-white hover:bg-white/[0.05]"
                 )}
               >
                 {link.name}
               </Link>
             ))}
-          </nav>
+          </div>
 
           <button
-            className="md:hidden p-2 text-slate-300 hover:text-white"
+            className="md:hidden p-2 text-slate-400 hover:text-white transition-colors"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           >
-            {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
-        </div>
+        </nav>
 
         {mobileMenuOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="md:hidden absolute top-full left-0 w-full bg-slate-900/95 backdrop-blur-xl border-b border-white/10 py-4 px-6 flex flex-col gap-4 shadow-2xl"
+            initial={{ opacity: 0, y: -8, scale: 0.97 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ duration: 0.2, ease: "easeOut" }}
+            className="pointer-events-auto absolute top-[72px] left-4 right-4 mx-auto max-w-2xl rounded-2xl bg-white/[0.05] border border-white/[0.08] backdrop-blur-2xl backdrop-saturate-150 shadow-[0_8px_32px_rgba(0,0,0,0.4)] mt-5 py-3 px-4 flex flex-col gap-1"
           >
             {navLinks.map((link) => (
               <Link
                 key={link.name}
                 to={link.path}
                 className={clsx(
-                  "flex items-center gap-3 p-3 rounded-lg transition-colors",
+                  "flex items-center gap-3 px-4 py-3 rounded-xl text-[14px] font-medium transition-all duration-200",
                   location.pathname === link.path
-                    ? "bg-cyan-500/10 text-cyan-400"
-                    : "text-slate-300 hover:bg-white/5 hover:text-white"
+                    ? "bg-white/[0.08] text-cyan-300"
+                    : "text-slate-400 hover:bg-white/[0.05] hover:text-white"
                 )}
               >
-                <link.icon className="w-5 h-5" />
-                <span className="font-medium">{link.name}</span>
+                <link.icon className="w-4 h-4" />
+                <span>{link.name}</span>
               </Link>
             ))}
           </motion.div>

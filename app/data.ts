@@ -1,9 +1,9 @@
 export const clubInfo = {
   name: "Enigma",
   tagline: "The official AI/ML club of IIIT Kottayam",
-  story: `Our journey takes us back to the roots of AI, tracing the captivating tale of the Enigma Machine and the brilliant minds that cracked its code during World War II. Just like Alan Turing and his team, we're dedicated to pushing boundaries and exploring the uncharted territories of AI.
+  story: `We trace our roots to Enigma.\nWhere intelligence was engineered.
 
-Our club transcends being a mere hub for AI/ML enthusiasts; it's a vibrant playground where you can immerse yourself in the sheer joy of experimenting with AI/ML technologies.`,
+Inspired by the codebreakers of World War II,\nwe build systems that push AI forward.`,
 };
 
 export const testimonials = [
