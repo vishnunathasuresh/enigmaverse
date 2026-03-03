@@ -1,8 +1,5 @@
 import { useEffect, useRef } from "react";
 import { motion } from "motion/react";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import anime from "animejs";
 import { clubInfo, testimonials, partners } from "@/data";
 import Silk from "@/components/Silk";
 import PixelSnow from "@/components/PixelSnow";
@@ -13,8 +10,6 @@ import BlurText from "@/components/BlurText";
 import GradientText from "@/components/GradientText";
 import { BrainCircuit, Cpu, Network, Sparkles, Quote } from "lucide-react";
 import { AnimatedText } from "@/components/ui/animated-underline-text-one";
-
-gsap.registerPlugin(ScrollTrigger);
 
 export function meta() {
   return [
@@ -30,50 +25,80 @@ export default function Home() {
   const testimonialsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      gsap.from(".hero-title", {
-        y: 120,
-        opacity: 0,
-        duration: 1.6,
-        ease: "power4.out",
-        stagger: 0.18,
+    let isMounted = true;
+    let ctx: { revert: () => void } | undefined;
+
+    const initAnimations = async () => {
+      const [{ gsap }, scrollTriggerModule, animeModule] = await Promise.all([
+        import("gsap"),
+        import("gsap/ScrollTrigger"),
+        import("animejs"),
+      ]);
+
+      if (!isMounted) return;
+
+      const ScrollTrigger =
+        (scrollTriggerModule as { ScrollTrigger?: unknown; default?: unknown }).ScrollTrigger ??
+        (scrollTriggerModule as { default?: unknown }).default;
+      const anime = ((animeModule as { default?: unknown }).default ?? animeModule) as {
+        (params: Record<string, unknown>): unknown;
+        stagger: (value: number) => unknown;
+      };
+
+      if (ScrollTrigger) {
+        gsap.registerPlugin(ScrollTrigger as object);
+      }
+
+      ctx = gsap.context(() => {
+        gsap.from(".hero-title", {
+          y: 120,
+          opacity: 0,
+          duration: 1.6,
+          ease: "power4.out",
+          stagger: 0.18,
+        });
+
+        gsap.from(".testimonial-card", {
+          scrollTrigger: {
+            trigger: testimonialsRef.current,
+            start: "top 85%",
+          },
+          y: 60,
+          opacity: 0,
+          duration: 0.9,
+          stagger: 0.18,
+          ease: "back.out(1.7)",
+        });
       });
 
-      gsap.from(".testimonial-card", {
-        scrollTrigger: {
-          trigger: testimonialsRef.current,
-          start: "top 85%",
-        },
-        y: 60,
-        opacity: 0,
-        duration: 0.9,
-        stagger: 0.18,
-        ease: "back.out(1.7)",
+      anime({
+        targets: ".floating-icon",
+        translateY: [-18, 18],
+        direction: "alternate",
+        loop: true,
+        easing: "easeInOutSine",
+        duration: 3200,
+        delay: anime.stagger(250),
       });
-    });
 
-    anime({
-      targets: ".floating-icon",
-      translateY: [-18, 18],
-      direction: "alternate",
-      loop: true,
-      easing: "easeInOutSine",
-      duration: 3200,
-      delay: anime.stagger(250),
-    });
+      anime({
+        targets: ".hero-orb",
+        scale: [1, 1.06, 1],
+        opacity: [0.07, 0.14, 0.07],
+        duration: 6000,
+        direction: "alternate",
+        loop: true,
+        easing: "easeInOutQuad",
+        delay: anime.stagger(800),
+      });
+    };
 
-    anime({
-      targets: ".hero-orb",
-      scale: [1, 1.06, 1],
-      opacity: [0.07, 0.14, 0.07],
-      duration: 6000,
-      direction: "alternate",
-      loop: true,
-      easing: "easeInOutQuad",
-      delay: anime.stagger(800),
-    });
+    void initAnimations();
 
-    return () => ctx.revert();
+    return () => {
+      isMounted = false;
+      ctx?.revert();
+    };
   }, []);
 
   const storyParagraphs = clubInfo.story.split("\n\n");
