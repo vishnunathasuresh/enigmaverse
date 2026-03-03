@@ -1,7 +1,7 @@
-import React from 'react';
+import type { ReactNode } from 'react';
 
 interface GradientTextProps {
-  children: React.ReactNode;
+  children: ReactNode;
   className?: string;
   colors?: string[];
   animationSpeed?: number;

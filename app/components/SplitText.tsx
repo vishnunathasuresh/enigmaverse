@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef, type CSSProperties, type RefObject } from 'react';
 import { gsap } from 'gsap';
 
 interface SplitTextProps {
@@ -98,9 +98,9 @@ export default function SplitText({
 
   return (
     <Tag
-      ref={containerRef as React.RefObject<HTMLParagraphElement & HTMLHeadingElement>}
+      ref={containerRef as RefObject<HTMLParagraphElement & HTMLHeadingElement>}
       className={className}
-      style={{ textAlign: textAlign as React.CSSProperties['textAlign'] }}
+      style={{ textAlign: textAlign as CSSProperties['textAlign'] }}
     />
   );
 }
