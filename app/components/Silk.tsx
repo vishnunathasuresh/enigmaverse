@@ -1,4 +1,4 @@
-import React, { forwardRef, useMemo, useRef, useLayoutEffect } from 'react';
+import { forwardRef, useMemo, useRef, useLayoutEffect, type MutableRefObject } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import type { RootState } from '@react-three/fiber';
 import { Color, Mesh, ShaderMaterial } from 'three';
@@ -93,14 +93,14 @@ const SilkPlane = forwardRef<Mesh, SilkPlaneProps>(function SilkPlane({ uniforms
   const { viewport } = useThree();
 
   useLayoutEffect(() => {
-    const mesh = ref as React.MutableRefObject<Mesh | null>;
+    const mesh = ref as MutableRefObject<Mesh | null>;
     if (mesh.current) {
       mesh.current.scale.set(viewport.width, viewport.height, 1);
     }
   }, [ref, viewport]);
 
   useFrame((_state: RootState, delta: number) => {
-    const mesh = ref as React.MutableRefObject<Mesh | null>;
+    const mesh = ref as MutableRefObject<Mesh | null>;
     if (mesh.current) {
       const material = mesh.current.material as ShaderMaterial & {
         uniforms: SilkUniforms;
